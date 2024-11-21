@@ -48,6 +48,23 @@ public class DiningPhilosophers
 			 */
 			int iPhilosophers = DEFAULT_NUMBER_OF_PHILOSOPHERS;
 
+				if(argv.length > 0){
+
+					try {
+						iPhilosophers = Integer.parseInt(argv[0]);
+
+						if(iPhilosophers <= 0)
+							throw new NumberFormatException("Not a positive integer!");
+
+					} catch (NumberFormatException e) {
+						System.err.println("\"" + argv[0] + "\" is not a positive decimal integer.");
+						System.err.println("Usage: java DiningPhilosophers [NUMBER_OF_PHILOSOPHERS]");
+						System.exit(1);	
+					}
+				}
+
+			
+			System.out.println(argv[0]);
 			// Make the monitor aware of how many philosophers there are
 			soMonitor = new Monitor(iPhilosophers);
 

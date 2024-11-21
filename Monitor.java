@@ -45,7 +45,7 @@ public class Monitor
 	 * -------------------------------
 	 */
 	private boolean canEat(int philosopherID){
-		int left = philosopherID - 1;
+		int left = (philosopherID - 1 + numPhilosophers) % numPhilosophers;// ensures the last philosopher wraps to the first chopstick to the left
 		int right = philosopherID % numPhilosophers;
 		return chopsticks[left] && chopsticks[right];
 	}
@@ -65,9 +65,12 @@ public class Monitor
 				e.printStackTrace();
 			}
 		}
-
-		chopsticks[philosopherID - 1] = false;
-		chopsticks[philosopherID % numPhilosophers] = false;
+		// Correct circular indexing for chopstick access
+		int left = (philosopherID - 1 + numPhilosophers) % numPhilosophers;
+		int right = philosopherID % numPhilosophers;
+	
+		chopsticks[left] = false;
+		chopsticks[right] = false;
 		state[philosopherID] = Philosopher.eating;
 	}
 
@@ -79,9 +82,14 @@ public class Monitor
 	{
 		int philosopherID = piTID - 1;
 
+		// Correct circular indexing for chopstick access
+		int left = (philosopherID - 1 + numPhilosophers) % numPhilosophers;
+		int right = philosopherID % numPhilosophers;
+	
+
         // Put down chopsticks
-        chopsticks[philosopherID] = true;
-        chopsticks[(philosopherID + 1) % numPhilosophers] = true;
+        chopsticks[left] = true;
+        chopsticks[right] = true;
         state[philosopherID] = Philosopher.thinking;
         notifyAll();
 	}
@@ -109,7 +117,7 @@ public class Monitor
 	public synchronized void endTalk()
 	{
 		isTalking = false;
-		notify();
+		notifyAll();
 	}
 }
 // EOF
